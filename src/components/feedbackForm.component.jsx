@@ -1,43 +1,46 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Card from "./share/card.component";
+import FeedbackContext from "../context/feedbackContext.context";
 import RatingSelect from "./ratingSelect.component";
 import Button from "./button.component";
 
-function FeedbackForm(handleAdd) {
+function FeedbackForm() {
   const [text, setText] = useState("");
   const [rating, setRating] = useState(10);
   const [btnDisabled, setBtnDisabled] = useState(true);
   const [message, setMessage] = useState("");
   
+  const {addFeedback} = useContext(FeedbackContext)
 
   const handleTextChange = (e) => {
     //Check if text == ' ', display message and btn disabled
-    if (text === "") {
-      setBtnDisabled(true);
-      setMessage(null);
-    } else if ((text !== "") & (text.trim.length <= 10)) {
-      setMessage("Text must be at least 10 characters");
-      setBtnDisabled(true);
+    if (text === '') {
+      setBtnDisabled(true)
+      setMessage(null)
+    } else if (text !== '' && text.trim().length <= 10) {
+      setMessage('Text must be at least 10 characters')
+      setBtnDisabled(true)
     } else {
-      setMessage(null);
-      setBtnDisabled(false);
+      setMessage(null)
+      setBtnDisabled(false)
     }
 
-    setText(e.target.value);
-  };
+    setText(e.target.value)
+  }
 
   const handleSubmit =(e) => {
     e.preventDefault()
-    if(text.trim().length > 10){
-        const newFeedback = {
-            text,
-            rating
-        }
+    if (text.trim().length > 10) {
+      const newFeedback = {
+        text,
+        rating,
+      }
 
-        handleAdd(newFeedback);
-        setText('')
+      addFeedback(newFeedback)
+      setText('')
     }
   }
+
 
   return (
     <Card>
